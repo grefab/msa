@@ -35,6 +35,7 @@ private:
 private:
     Ui::MainWindow *ui;
     Engine* engine_;
+
 };
 
 #endif // MAINWINDOW_H
