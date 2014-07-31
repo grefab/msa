@@ -29,7 +29,7 @@ QGraphicsScene*  Engine::scene()
     return &scene_;
 }
 
-void Engine::loadFile(const QString& filename)
+void Engine::loadFile(QString filename)
 {
     QPixmap pxm = QPixmap(filename);
     imagePixmapItem_->setPixmap(pxm);
@@ -37,6 +37,8 @@ void Engine::loadFile(const QString& filename)
     drawingPixmap_ = QPixmap(pxm.size());
     drawingPixmap_.fill(Qt::transparent);
     drawingPixmapItem_->setPixmap(drawingPixmap_);
+
+    emit fileLoaded();
 }
 
 void Engine::onShowCircle()

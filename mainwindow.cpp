@@ -18,6 +18,10 @@ MainWindow::MainWindow(Engine* engine, QWidget *parent) :
 
     connect(ui->graphicsView, &ZoomPanGraphicsView::addCircle, engine_, &Engine::onAddCircle);
     connect(ui->graphicsView, &ZoomPanGraphicsView::removeCircle, engine_, &Engine::onRemoveCircle);
+
+    connect(ui->graphicsView, &ZoomPanGraphicsView::loadFileRequest, engine_, &Engine::loadFile);
+
+    connect(engine_, &Engine::fileLoaded, this, &MainWindow::onFileLoaded);
 }
 
 MainWindow::~MainWindow()
@@ -25,9 +29,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::onFileLoaded()
 {
-    engine_->loadFile("D:\\IMG_9253.JPG");
     ui->graphicsView->fitInView(
         ui->graphicsView->scene()->itemsBoundingRect(),
         Qt::KeepAspectRatio);

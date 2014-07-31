@@ -1,5 +1,7 @@
 #include "zoompangraphicsview.h"
 #include <QWheelEvent>
+#include <QMimeData>
+#include <QFileInfo>
 
 #include <QGuiApplication>
 #include <QDebug>
@@ -85,6 +87,34 @@ void ZoomPanGraphicsView::mouseReleaseEvent(QMouseEvent* event)
     if( mouseMode_ == MouseMode::Move ) {
         QGraphicsView::mouseReleaseEvent(event);
     } else {
+    }
+}
+
+void ZoomPanGraphicsView::dragEnterEvent(QDragEnterEvent* event)
+{
+    if( event->mimeData()->text().toUpper().endsWith(".JPG") ||
+        event->mimeData()->text().toUpper().endsWith(".PNG") ||
+        event->mimeData()->text().toUpper().endsWith(".BMP")) {
+        event->acceptProposedAction();
+    }
+}
+
+void ZoomPanGraphicsView::dragMoveEvent(QDragMoveEvent* event)
+{
+    event->accept();
+}
+
+void ZoomPanGraphicsView::dragLeaveEvent(QDragLeaveEvent* event)
+{
+    event->accept();
+}
+
+void ZoomPanGraphicsView::dropEvent(QDropEvent* event)
+{
+    QFileInfo file(event->mimeData()->text().remove("file:///"));
+
+    if( file.exists() ) {
+        emit loadFileRequest(file.absoluteFilePath());
     }
 }
 

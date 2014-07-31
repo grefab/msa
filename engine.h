@@ -15,9 +15,12 @@ public:
 
     QGraphicsScene* scene();
 
-    void loadFile(const QString& filename);
+signals:
+    void fileLoaded();
 
 public slots:
+    void loadFile(QString filename);
+
     void onShowCircle();
     void onHideCircle();
     void onCirclePosChanged(QPointF point);
