@@ -137,6 +137,7 @@ void Engine::onAddCircle(QPointF point)
         QBrush brush = QBrush(brushColor);
 
         QPainter p(&drawingPixmap_);
+        p.setRenderHint(QPainter::Antialiasing);
         p.setPen(pen);
         p.setBrush(brush);
         p.drawEllipse(point, circleRadius_, circleRadius_);
@@ -153,6 +154,7 @@ void Engine::onRemoveCircle(QPointF point)
         QBrush brush = QBrush(brushColor);
 
         QPainter p(&drawingPixmap_);
+        p.setRenderHint(QPainter::Antialiasing);
         p.setPen(pen);
         p.setBrush(brush);
         p.setCompositionMode(QPainter::CompositionMode_Source);
