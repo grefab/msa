@@ -19,7 +19,7 @@ Engine::Engine(QObject *parent) :
         QPen pen = QPen(Qt::NoPen);
         QColor brushColor = QColor(255, 0, 0, 128);
         QBrush brush = QBrush(brushColor);
-        circleItem_ = scene_.addEllipse(0, 0, circleDiameter_, circleDiameter_, pen, brush);
+        circleItem_ = scene_.addEllipse(0, 0, circleRadius_*2, circleRadius_*2, pen, brush);
         circleItem_->hide();
     }
 }
@@ -52,28 +52,28 @@ void Engine::onHideCircle()
 void Engine::onCirclePosChanged(QPointF point)
 {
     circleCenter_ = point;
-    circleItem_->setPos(point - QPointF(circleDiameter_/2, circleDiameter_/2));
+    circleItem_->setPos(point - QPointF(circleRadius_, circleRadius_));
 }
 
 void Engine::onEnlargeCircle()
 {
-    QPointF mid = circleItem_->pos() + QPointF(circleDiameter_/2, circleDiameter_/2);
+    QPointF mid = circleItem_->pos() + QPointF(circleRadius_, circleRadius_);
 
-    circleDiameter_ *= 1.15;
+    circleRadius_ *= 1.15;
 
-    circleItem_->setRect(0, 0, circleDiameter_, circleDiameter_);
-    circleItem_->setPos(mid - QPointF(circleDiameter_/2, circleDiameter_/2));
+    circleItem_->setRect(0, 0, circleRadius_*2, circleRadius_*2);
+    circleItem_->setPos(mid - QPointF(circleRadius_, circleRadius_));
 }
 
 void Engine::onShrinkCircle()
 {
-    QPointF mid = circleItem_->pos() + QPointF(circleDiameter_/2, circleDiameter_/2);
+    QPointF mid = circleItem_->pos() + QPointF(circleRadius_, circleRadius_);
 
-    circleDiameter_ /= 1.15;
-    circleDiameter_ = qMax<qreal>(1, circleDiameter_);
+    circleRadius_ /= 1.15;
+    circleRadius_ = qMax<qreal>(0.5, circleRadius_);
 
-    circleItem_->setRect(0, 0, circleDiameter_, circleDiameter_);
-    circleItem_->setPos(mid - QPointF(circleDiameter_/2, circleDiameter_/2));
+    circleItem_->setRect(0, 0, circleRadius_*2, circleRadius_*2);
+    circleItem_->setPos(mid - QPointF(circleRadius_, circleRadius_));
 }
 
 void Engine::onAddCircle(QPointF point)
@@ -85,7 +85,7 @@ void Engine::onAddCircle(QPointF point)
     QPainter p(&drawingPixmap_);
     p.setPen(pen);
     p.setBrush(brush);
-    p.drawEllipse(point, circleDiameter_/2, circleDiameter_/2);
+    p.drawEllipse(point, circleRadius_, circleRadius_);
 
     drawingPixmapItem_->setPixmap(drawingPixmap_);
 }
@@ -100,7 +100,7 @@ void Engine::onRemoveCircle(QPointF point)
     p.setPen(pen);
     p.setBrush(brush);
     p.setCompositionMode(QPainter::CompositionMode_Source);
-    p.drawEllipse(point, circleDiameter_/2, circleDiameter_/2);
+    p.drawEllipse(point, circleRadius_, circleRadius_);
 
     drawingPixmapItem_->setPixmap(drawingPixmap_);
 }

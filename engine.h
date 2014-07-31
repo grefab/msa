@@ -37,7 +37,7 @@ private:
 private:
     QPixmap drawingPixmap_;
     QPointF circleCenter_;
-    qreal circleDiameter_ = 100;
+    qreal circleRadius_ = 100;
 
 };
 
