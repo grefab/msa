@@ -47,6 +47,7 @@ private:
 
     QPoint lastMousePos_;
     MouseMode mouseMode_ = MouseMode::Move;
+
 };
 
 #endif // ZOOMPANGRAPHICSVIEW_H
