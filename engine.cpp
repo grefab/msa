@@ -32,7 +32,6 @@ QGraphicsScene*  Engine::scene()
 
 void Engine::loadFile(QString filename, QString maskname)
 {
-
     QFileInfo file(filename);
     if( file.exists() ) {
         QPixmap pxm = QPixmap(filename);
@@ -47,7 +46,6 @@ void Engine::loadFile(QString filename, QString maskname)
         }
         drawingPixmapItem_->setPixmap(drawingPixmap_);
     }
-
 
     emit fileLoaded(filename);
 }
@@ -160,5 +158,6 @@ void Engine::onRemoveCircle(QPointF point)
         p.setCompositionMode(QPainter::CompositionMode_Source);
         p.drawEllipse(point, circleRadius_, circleRadius_);
     }
+
     drawingPixmapItem_->setPixmap(drawingPixmap_);
 }
