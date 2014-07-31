@@ -17,6 +17,7 @@ public:
 
     void loadFile(QString filename, QString maskname);
     void saveMask(QString filename);
+    void saveComposite(QString filename);
     void calculateArea();
 
 signals:

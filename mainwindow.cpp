@@ -54,6 +54,7 @@ void MainWindow::on_saveButton_clicked()
 {
     if( !currentFile_.isEmpty() ) {
         engine_->saveMask(getMaskName(currentFile_));
+        engine_->saveComposite(getCompositeName(currentFile_));
         ui->graphicsView->setFocus();
     }
 }
@@ -61,6 +62,11 @@ void MainWindow::on_saveButton_clicked()
 QString MainWindow::getMaskName(QString filename)
 {
     return filename + "_mask.png";
+}
+
+QString MainWindow::getCompositeName(QString filename)
+{
+    return filename + "_composite.png";
 }
 
 void MainWindow::on_calculateAreaButton_clicked()

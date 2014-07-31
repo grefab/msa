@@ -28,6 +28,7 @@ private slots:
 private:
     QString currentFile_;
     QString getMaskName(QString filename);
+    QString getCompositeName(QString filename);
 
 private:
     Ui::MainWindow *ui;

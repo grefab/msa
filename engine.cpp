@@ -57,15 +57,36 @@ void Engine::saveMask(QString filename)
     drawingPixmap_.save(filename);
 }
 
+void Engine::saveComposite(QString filename)
+{
+    QImage maskImage = drawingPixmap_.toImage();
+    QImage originalImage = imagePixmapItem_->pixmap().toImage();
+
+    {
+        QImage alpha = QImage(maskImage.size(), QImage::Format_Indexed8);
+        alpha.fill(128);
+        maskImage.setAlphaChannel(alpha);
+    }
+
+    {
+        QPainter p(&originalImage);
+        p.drawImage(originalImage.rect(),
+                    maskImage,
+                    maskImage.rect());
+    }
+
+    originalImage.save(filename);
+}
+
 void Engine::calculateArea()
 {
-    QImage img = drawingPixmap_.toImage();
+    QImage maskImage = drawingPixmap_.toImage();
 
     qreal area = 0;
-    for( int y = 0; y < img.height(); y++ ) {
-        uchar* line = img.scanLine(y);
+    for( int y = 0; y < maskImage.height(); y++ ) {
+        uchar* line = maskImage.scanLine(y);
 
-        for( int x = 0; x < img.width(); ++x) {
+        for( int x = 0; x < maskImage.width(); ++x) {
             area += (qreal)line[x*4+3] / 255.0f;
         }
     }
@@ -112,29 +133,32 @@ void Engine::onShrinkCircle()
 
 void Engine::onAddCircle(QPointF point)
 {
-    QPen pen = QPen(Qt::NoPen);
-    QColor brushColor = QColor(255, 255, 0, 255);
-    QBrush brush = QBrush(brushColor);
+    {
+        QPen pen = QPen(Qt::NoPen);
+        QColor brushColor = QColor(255, 255, 0, 255);
+        QBrush brush = QBrush(brushColor);
 
-    QPainter p(&drawingPixmap_);
-    p.setPen(pen);
-    p.setBrush(brush);
-    p.drawEllipse(point, circleRadius_, circleRadius_);
+        QPainter p(&drawingPixmap_);
+        p.setPen(pen);
+        p.setBrush(brush);
+        p.drawEllipse(point, circleRadius_, circleRadius_);
+    }
 
     drawingPixmapItem_->setPixmap(drawingPixmap_);
 }
 
 void Engine::onRemoveCircle(QPointF point)
 {
-    QPen pen = QPen(Qt::NoPen);
-    QColor brushColor = Qt::transparent;
-    QBrush brush = QBrush(brushColor);
+    {
+        QPen pen = QPen(Qt::NoPen);
+        QColor brushColor = Qt::transparent;
+        QBrush brush = QBrush(brushColor);
 
-    QPainter p(&drawingPixmap_);
-    p.setPen(pen);
-    p.setBrush(brush);
-    p.setCompositionMode(QPainter::CompositionMode_Source);
-    p.drawEllipse(point, circleRadius_, circleRadius_);
-
+        QPainter p(&drawingPixmap_);
+        p.setPen(pen);
+        p.setBrush(brush);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+        p.drawEllipse(point, circleRadius_, circleRadius_);
+    }
     drawingPixmapItem_->setPixmap(drawingPixmap_);
 }
