@@ -21,7 +21,6 @@ MainWindow::MainWindow(Engine* engine, QWidget *parent) :
     connect(ui->graphicsView, &ZoomPanGraphicsView::addCircle, this, &MainWindow::onCircleChanged);
     connect(ui->graphicsView, &ZoomPanGraphicsView::removeCircle, this, &MainWindow::onCircleChanged);
 
-
     connect(ui->graphicsView, &ZoomPanGraphicsView::loadFileRequest, this, &MainWindow::onLoadFileRequest);
 
     connect(engine_, &Engine::fileLoaded, this, &MainWindow::onFileLoaded);
