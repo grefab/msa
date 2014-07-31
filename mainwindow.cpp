@@ -15,6 +15,9 @@ MainWindow::MainWindow(Engine* engine, QWidget *parent) :
 
     connect(ui->graphicsView, &ZoomPanGraphicsView::enlargeCircle, engine_, &Engine::onEnlargeCircle);
     connect(ui->graphicsView, &ZoomPanGraphicsView::shrinkCircle, engine_, &Engine::onShrinkCircle);
+
+    connect(ui->graphicsView, &ZoomPanGraphicsView::addCircle, engine_, &Engine::onAddCircle);
+    connect(ui->graphicsView, &ZoomPanGraphicsView::removeCircle, engine_, &Engine::onRemoveCircle);
 }
 
 MainWindow::~MainWindow()

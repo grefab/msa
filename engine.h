@@ -25,13 +25,20 @@ public slots:
     void onEnlargeCircle();
     void onShrinkCircle();
 
-private:
-    QGraphicsScene scene_;
-    QGraphicsPixmapItem*  pixmap_;
-    QGraphicsEllipseItem* circle_;
+    void onAddCircle(QPointF point);
+    void onRemoveCircle(QPointF point);
 
 private:
+    QGraphicsScene scene_;
+    QGraphicsPixmapItem*  imagePixmapItem_;
+    QGraphicsPixmapItem*  drawingPixmapItem_;
+    QGraphicsEllipseItem* circleItem_;
+
+private:
+    QPixmap drawingPixmap_;
+    QPointF circleCenter_;
     qreal circleDiameter_ = 100;
+
 };
 
 #endif // ENGINE_H
