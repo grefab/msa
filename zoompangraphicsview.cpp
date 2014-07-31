@@ -8,6 +8,7 @@ ZoomPanGraphicsView::ZoomPanGraphicsView(QWidget* parent) :
     QGraphicsView(parent)
 {
     setDragMode(QGraphicsView::ScrollHandDrag);
+    setMouseTracking(true);
 }
 
 void ZoomPanGraphicsView::keyPressEvent(QKeyEvent* event)
@@ -22,37 +23,60 @@ void ZoomPanGraphicsView::keyReleaseEvent(QKeyEvent* event)
 
 void ZoomPanGraphicsView::wheelEvent(QWheelEvent* event)
 {
-    setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-
-    // Scale the view / do the zoom
-    double scaleFactor = 1.15;
-    if(event->delta() > 0) {
-        // Zoom in
-        scale(scaleFactor, scaleFactor);
-    } else {
-        // Zooming out
-        scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+    switch( mouseMode_ ) {
+        case MouseMode::Move: {
+            setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+            double scaleFactor = 1.15;
+            if(event->delta() > 0) {
+                /* Zoom in. */
+                scale(scaleFactor, scaleFactor);
+            } else {
+                /* Zoom out. */
+                scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+            }
+        } break;
+        case MouseMode::Interact: {
+            if(event->delta() > 0) {
+                emit enlargeCircle();
+            } else {
+                emit shrinkCircle();
+            }
+        } break;
     }
 
-    // Don't call superclass handler here
-    // as wheel is normally used for moving scrollbars
 }
 
 void ZoomPanGraphicsView::mousePressEvent(QMouseEvent* event)
 {
+    lastMousePos_ = event->pos();
+
     if( mouseMode_ == MouseMode::Move ) {
         QGraphicsView::mousePressEvent(event);
     } else {
-        lastMousePosition_ = event->pos();
+        const QPointF imagePos = mapToScene(event->pos());
+        if(event->buttons() && Qt::LeftButton ) {
+            emit addCircle(imagePos);
+        } else if(event->buttons() && Qt::RightButton ) {
+            emit removeCircle(imagePos);
+        }
     }
 }
 
 void ZoomPanGraphicsView::mouseMoveEvent(QMouseEvent* event)
 {
+    lastMousePos_ = event->pos();
+
     if( mouseMode_ == MouseMode::Move ) {
         QGraphicsView::mouseMoveEvent(event);
     } else {
-        lastMousePosition_ = event->pos();
+        const QPointF imagePos = mapToScene(event->pos());
+        emit circlePosChanged(imagePos);
+
+        if(event->buttons() && Qt::LeftButton ) {
+            emit addCircle(imagePos);
+        } else if(event->buttons() && Qt::RightButton ) {
+            emit removeCircle(imagePos);
+        }
     }
 }
 
@@ -61,16 +85,18 @@ void ZoomPanGraphicsView::mouseReleaseEvent(QMouseEvent* event)
     if( mouseMode_ == MouseMode::Move ) {
         QGraphicsView::mouseReleaseEvent(event);
     } else {
-        lastMousePosition_ = event->pos();
     }
 }
 
 void ZoomPanGraphicsView::updateMouseMode(Qt::KeyboardModifiers modifiers)
 {
-if( modifiers && Qt::ControlModifier ) {
+    if( modifiers && Qt::ControlModifier ) {
         mouseMode_ = MouseMode::Interact;
+        emit circlePosChanged(mapToScene(lastMousePos_));
+        emit showCircle();
     } else {
         mouseMode_ = MouseMode::Move;
+        emit hideCircle();
     }
 
     updateCursor();

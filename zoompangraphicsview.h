@@ -9,6 +9,16 @@ class ZoomPanGraphicsView : public QGraphicsView
 public:
     explicit ZoomPanGraphicsView(QWidget *parent = 0);
 
+signals:
+    void enlargeCircle();
+    void shrinkCircle();
+    void addCircle(QPointF point);
+    void removeCircle(QPointF point);
+
+    void showCircle();
+    void hideCircle();
+    void circlePosChanged(QPointF point);
+
 protected:
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
@@ -28,7 +38,7 @@ private:
     void updateMouseMode(Qt::KeyboardModifiers modifiers);
     void updateCursor();
 
-    QPoint lastMousePosition_;
+    QPoint lastMousePos_;
     MouseMode mouseMode_ = MouseMode::Move;
 };
 

@@ -3,7 +3,9 @@
 
 #include <QObject>
 #include <QGraphicsScene>
-#include <QPixmap>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsEllipseItem>
+
 
 class Engine : public QObject
 {
@@ -13,11 +15,23 @@ public:
 
     QGraphicsScene* scene();
 
-    QPixmap loadFile(const QString& filename);
+    void loadFile(const QString& filename);
 
+public slots:
+    void onShowCircle();
+    void onHideCircle();
+    void onCirclePosChanged(QPointF point);
+
+    void onEnlargeCircle();
+    void onShrinkCircle();
 
 private:
     QGraphicsScene scene_;
+    QGraphicsPixmapItem*  pixmap_;
+    QGraphicsEllipseItem* circle_;
+
+private:
+    qreal circleDiameter_ = 100;
 };
 
 #endif // ENGINE_H
