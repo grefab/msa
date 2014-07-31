@@ -19,7 +19,7 @@ MainWindow::MainWindow(Engine* engine, QWidget *parent) :
     connect(ui->graphicsView, &ZoomPanGraphicsView::addCircle, engine_, &Engine::onAddCircle);
     connect(ui->graphicsView, &ZoomPanGraphicsView::removeCircle, engine_, &Engine::onRemoveCircle);
 
-    connect(ui->graphicsView, &ZoomPanGraphicsView::loadFileRequest, engine_, &Engine::loadFile);
+    connect(ui->graphicsView, &ZoomPanGraphicsView::loadFileRequest, this, &MainWindow::onLoadFileRequest);
 
     connect(engine_, &Engine::fileLoaded, this, &MainWindow::onFileLoaded);
 }
@@ -29,10 +29,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onFileLoaded()
+void MainWindow::onLoadFileRequest(QString filename)
 {
+    engine_->loadFile(filename, getMaskName(filename));
+}
+
+void MainWindow::onFileLoaded(QString filename)
+{
+    currentFile_ = filename;
     ui->graphicsView->fitInView(
         ui->graphicsView->scene()->itemsBoundingRect(),
         Qt::KeepAspectRatio);
     ui->graphicsView->setFocus();
+}
+
+void MainWindow::on_saveButton_clicked()
+{
+    if( !currentFile_.isEmpty() ) {
+        engine_->saveMask(getMaskName(currentFile_));
+        ui->graphicsView->setFocus();
+    }
+}
+
+QString MainWindow::getMaskName(QString filename)
+{
+    return filename + "_mask.png";
 }

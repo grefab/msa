@@ -17,7 +17,14 @@ public:
     ~MainWindow();
 
 private slots:
-    void onFileLoaded();
+    void onLoadFileRequest(QString filename);
+    void onFileLoaded(QString filename);
+
+    void on_saveButton_clicked();
+
+private:
+    QString currentFile_;
+    QString getMaskName(QString filename);
 
 private:
     Ui::MainWindow *ui;

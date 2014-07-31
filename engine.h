@@ -16,10 +16,11 @@ public:
     QGraphicsScene* scene();
 
 signals:
-    void fileLoaded();
+    void fileLoaded(QString filename);
 
 public slots:
-    void loadFile(QString filename);
+    void loadFile(QString filename, QString maskname);
+    void saveMask(QString filename);
 
     void onShowCircle();
     void onHideCircle();

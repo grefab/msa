@@ -1,5 +1,6 @@
 #include "engine.h"
 #include <QPainter>
+#include <QFileInfo>
 
 #include <QDebug>
 
@@ -29,16 +30,31 @@ QGraphicsScene*  Engine::scene()
     return &scene_;
 }
 
-void Engine::loadFile(QString filename)
+void Engine::loadFile(QString filename, QString maskname)
 {
-    QPixmap pxm = QPixmap(filename);
-    imagePixmapItem_->setPixmap(pxm);
 
-    drawingPixmap_ = QPixmap(pxm.size());
-    drawingPixmap_.fill(Qt::transparent);
-    drawingPixmapItem_->setPixmap(drawingPixmap_);
+    QFileInfo file(filename);
+    if( file.exists() ) {
+        QPixmap pxm = QPixmap(filename);
+        imagePixmapItem_->setPixmap(pxm);
 
-    emit fileLoaded();
+        QFileInfo maskFile(maskname);
+        if( maskFile.exists() ) {
+            drawingPixmap_ = QPixmap(maskname);
+        } else {
+            drawingPixmap_ = QPixmap(pxm.size());
+            drawingPixmap_.fill(Qt::transparent);
+        }
+        drawingPixmapItem_->setPixmap(drawingPixmap_);
+    }
+
+
+    emit fileLoaded(filename);
+}
+
+void Engine::saveMask(QString filename)
+{
+    drawingPixmap_.save(filename);
 }
 
 void Engine::onShowCircle()
