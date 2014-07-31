@@ -46,7 +46,7 @@ void MainWindow::onFileLoaded(QString filename)
 
 void MainWindow::onAreaChanged(qreal area)
 {
-    QString string = QString("%1").arg(area);
+    QString string = QString("%1px²").arg(area);
     ui->labelArea->setText(string);
 }
 
