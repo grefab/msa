@@ -15,13 +15,15 @@ public:
 
     QGraphicsScene* scene();
 
-signals:
-    void fileLoaded(QString filename);
-
-public slots:
     void loadFile(QString filename, QString maskname);
     void saveMask(QString filename);
+    void calculateArea();
 
+signals:
+    void fileLoaded(QString filename);
+    void areaCalculated(qreal area);
+
+public slots:
     void onShowCircle();
     void onHideCircle();
     void onCirclePosChanged(QPointF point);

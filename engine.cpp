@@ -57,6 +57,22 @@ void Engine::saveMask(QString filename)
     drawingPixmap_.save(filename);
 }
 
+void Engine::calculateArea()
+{
+    QImage img = drawingPixmap_.toImage();
+
+    qreal area = 0;
+    for( int y = 0; y < img.height(); y++ ) {
+        uchar* line = img.scanLine(y);
+
+        for( int x = 0; x < img.width(); ++x) {
+            area += (qreal)line[x*4+3] / 255.0f;
+        }
+    }
+
+    emit areaCalculated(area);
+}
+
 void Engine::onShowCircle()
 {
     circleItem_->show();

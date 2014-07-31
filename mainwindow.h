@@ -19,8 +19,11 @@ public:
 private slots:
     void onLoadFileRequest(QString filename);
     void onFileLoaded(QString filename);
+    void onAreaChanged(qreal area);
 
     void on_saveButton_clicked();
+
+    void on_calculateAreaButton_clicked();
 
 private:
     QString currentFile_;

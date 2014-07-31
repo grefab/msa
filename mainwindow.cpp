@@ -22,6 +22,7 @@ MainWindow::MainWindow(Engine* engine, QWidget *parent) :
     connect(ui->graphicsView, &ZoomPanGraphicsView::loadFileRequest, this, &MainWindow::onLoadFileRequest);
 
     connect(engine_, &Engine::fileLoaded, this, &MainWindow::onFileLoaded);
+    connect(engine_, &Engine::areaCalculated, this, &MainWindow::onAreaChanged);
 }
 
 MainWindow::~MainWindow()
@@ -43,6 +44,12 @@ void MainWindow::onFileLoaded(QString filename)
     ui->graphicsView->setFocus();
 }
 
+void MainWindow::onAreaChanged(qreal area)
+{
+    QString string = QString("%1").arg(area);
+    ui->labelArea->setText(string);
+}
+
 void MainWindow::on_saveButton_clicked()
 {
     if( !currentFile_.isEmpty() ) {
@@ -54,4 +61,10 @@ void MainWindow::on_saveButton_clicked()
 QString MainWindow::getMaskName(QString filename)
 {
     return filename + "_mask.png";
+}
+
+void MainWindow::on_calculateAreaButton_clicked()
+{
+    engine_->calculateArea();
+    ui->graphicsView->setFocus();
 }
