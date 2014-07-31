@@ -17,6 +17,8 @@ public:
     ~MainWindow();
 
 private slots:
+    void onCircleChanged(QPointF);
+
     void onLoadFileRequest(QString filename);
     void onFileLoaded(QString filename);
     void onAreaChanged(qreal area);

@@ -18,6 +18,9 @@ MainWindow::MainWindow(Engine* engine, QWidget *parent) :
 
     connect(ui->graphicsView, &ZoomPanGraphicsView::addCircle, engine_, &Engine::onAddCircle);
     connect(ui->graphicsView, &ZoomPanGraphicsView::removeCircle, engine_, &Engine::onRemoveCircle);
+    connect(ui->graphicsView, &ZoomPanGraphicsView::addCircle, this, &MainWindow::onCircleChanged);
+    connect(ui->graphicsView, &ZoomPanGraphicsView::removeCircle, this, &MainWindow::onCircleChanged);
+
 
     connect(ui->graphicsView, &ZoomPanGraphicsView::loadFileRequest, this, &MainWindow::onLoadFileRequest);
 
@@ -28,6 +31,11 @@ MainWindow::MainWindow(Engine* engine, QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::onCircleChanged(QPointF)
+{
+    ui->labelArea->setText("???");
 }
 
 void MainWindow::onLoadFileRequest(QString filename)
