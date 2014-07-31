@@ -56,9 +56,9 @@ void ZoomPanGraphicsView::mousePressEvent(QMouseEvent* event)
         QGraphicsView::mousePressEvent(event);
     } else {
         const QPointF imagePos = mapToScene(event->pos());
-        if(event->buttons() & Qt::LeftButton ) {
+        if( event->buttons() & Qt::LeftButton ) {
             emit addCircle(imagePos);
-        } else if(event->buttons() & Qt::RightButton ) {
+        } else if( event->buttons() & Qt::RightButton ) {
             emit removeCircle(imagePos);
         }
     }
@@ -74,9 +74,9 @@ void ZoomPanGraphicsView::mouseMoveEvent(QMouseEvent* event)
         const QPointF imagePos = mapToScene(event->pos());
         emit circlePosChanged(imagePos);
 
-        if(event->buttons() & Qt::LeftButton ) {
+        if( event->buttons() & Qt::LeftButton ) {
             emit addCircle(imagePos);
-        } else if(event->buttons() & Qt::RightButton ) {
+        } else if( event->buttons() & Qt::RightButton ) {
             emit removeCircle(imagePos);
         }
     }
@@ -86,7 +86,6 @@ void ZoomPanGraphicsView::mouseReleaseEvent(QMouseEvent* event)
 {
     if( mouseMode_ == MouseMode::Move ) {
         QGraphicsView::mouseReleaseEvent(event);
-    } else {
     }
 }
 
@@ -94,7 +93,7 @@ void ZoomPanGraphicsView::dragEnterEvent(QDragEnterEvent* event)
 {
     if( event->mimeData()->text().toUpper().endsWith(".JPG") ||
         event->mimeData()->text().toUpper().endsWith(".PNG") ||
-        event->mimeData()->text().toUpper().endsWith(".BMP")) {
+        event->mimeData()->text().toUpper().endsWith(".BMP") ) {
         event->acceptProposedAction();
     }
 }
