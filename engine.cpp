@@ -6,6 +6,7 @@
 #include "boost/polygon/voronoi.hpp"
 
 #include <QGraphicsPolygonItem>
+#include <QGraphicsLineItem>
 
 Engine::Engine(QObject *parent) :
     QObject(parent)
@@ -39,23 +40,53 @@ void Engine::lab()
         typedef boost::polygon::segment_data<int> Segment;
 
         std::vector<Point> points;
-        points.push_back(Point(0, 0));
-        points.push_back(Point(1, 6));
         std::vector<Segment> segments;
-        segments.push_back(Segment(Point(-4, 5), Point(5, -1)));
-        segments.push_back(Segment(Point(3, -11), Point(13, -1)));
+
+        if( sourcePolygon.size() > 2 ) {
+            for(int i = 0; i < sourcePolygon.size(); ++i) {
+                segments.push_back(
+                            Segment(
+                                Point(sourcePolygon[i].x(), sourcePolygon[i].y()),
+                                Point(sourcePolygon[i+1].x(), sourcePolygon[i+1].y())));
+            }
+            segments.push_back(
+                        Segment(
+                            Point(sourcePolygon.last().x(), sourcePolygon.last().y()),
+                            Point(sourcePolygon.first().x(), sourcePolygon.first().y())));
+        }
 
         boost::polygon::construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &vd);
     }
 
     {
         qDebug() << "iterating...";
-        for( VoronoiDiagram::const_edge_iterator it = vd.edges().begin();
-             it != vd.edges().end(); ++it ) {
+        for( VoronoiDiagram::const_edge_iterator it = vd.edges().begin(); it != vd.edges().end(); ++it ) {
+            const VoronoiDiagram::vertex_type *v0 = it->vertex0();
+            const VoronoiDiagram::vertex_type *v1 = it->vertex1();
+
             if( it->is_primary() ) {
                 qDebug() << "Primary edge found!";
+
+                if( v0 && v1 ) {
+                    scene_.addLine(v0->x(),
+                                   v0->y(),
+                                   v1->x(),
+                                   v1->y(),
+                                   QPen(Qt::black));
+                } else {
+                    qDebug() << "omitted line";
+                }
             } else {
                 qDebug() << "Secondary edge found!";
+                if( v0 && v1 ) {
+                    scene_.addLine(v0->x(),
+                                   v0->y(),
+                                   v1->x(),
+                                   v1->y(),
+                                   QPen(Qt::green));
+                } else {
+                    qDebug() << "omitted line";
+                }
             }
         }
         qDebug() << "done.";
