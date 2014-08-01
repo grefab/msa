@@ -7,6 +7,7 @@
 
 #include <QGraphicsPolygonItem>
 #include <QGraphicsLineItem>
+#include <QGraphicsEllipseItem>
 
 Engine::Engine(QObject *parent) :
     QObject(parent)
@@ -42,17 +43,8 @@ void Engine::lab()
         std::vector<Point> points;
         std::vector<Segment> segments;
 
-        if( sourcePolygon.size() > 2 ) {
-            for(int i = 0; i < sourcePolygon.size(); ++i) {
-                segments.push_back(
-                            Segment(
-                                Point(sourcePolygon[i].x(), sourcePolygon[i].y()),
-                                Point(sourcePolygon[i+1].x(), sourcePolygon[i+1].y())));
-            }
-            segments.push_back(
-                        Segment(
-                            Point(sourcePolygon.last().x(), sourcePolygon.last().y()),
-                            Point(sourcePolygon.first().x(), sourcePolygon.first().y())));
+        for( const QPointF& p : sourcePolygon ) {
+            points.push_back(Point(p.x(), p.y()));
         }
 
         boost::polygon::construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &vd);
@@ -63,6 +55,24 @@ void Engine::lab()
         for( VoronoiDiagram::const_edge_iterator it = vd.edges().begin(); it != vd.edges().end(); ++it ) {
             const VoronoiDiagram::vertex_type *v0 = it->vertex0();
             const VoronoiDiagram::vertex_type *v1 = it->vertex1();
+
+            if( v0 ) {
+                scene_.addEllipse(v0->x() - 5,
+                                  v0->y() - 5,
+                                  10,
+                                  10,
+                                  QPen(Qt::blue),
+                                  QBrush(Qt::NoBrush));
+            }
+
+            if( v1 ) {
+                scene_.addEllipse(v1->x() - 5,
+                                  v1->y() - 5,
+                                  10,
+                                  10,
+                                  QPen(Qt::blue),
+                                  QBrush(Qt::NoBrush));
+            }
 
             if( it->is_primary() ) {
                 qDebug() << "Primary edge found!";
