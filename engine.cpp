@@ -24,11 +24,10 @@ void Engine::lab()
 {
     QPolygonF sourcePolygon;
     {
-        sourcePolygon << QPointF( 30,  30);
-        sourcePolygon << QPointF(-10,  40);
-        sourcePolygon << QPointF(-30,  10);
-        sourcePolygon << QPointF(-30, -10);
-        sourcePolygon << QPointF(-10, -20);
+        for(int x = -70; x <= 70; ++x) { sourcePolygon << QPointF( x, -50); }
+        for(int y = -50; y <= 50; ++y) { sourcePolygon << QPointF( 70, y); }
+        for(int x = 70; x >= -70; --x) { sourcePolygon << QPointF( x, 50); }
+        for(int y = 50; y >= -50; --y) { sourcePolygon << QPointF( -70, y); }
 
         scene_.addPolygon(sourcePolygon, QPen(Qt::red), QBrush(Qt::NoBrush));
     }
