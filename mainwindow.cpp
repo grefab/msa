@@ -14,12 +14,3 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-void MainWindow::on_pushButton_clicked()
-{
-    engine_->loadFile("D:\\IMG_9253.JPG");
-    ui->graphicsView->fitInView(
-        ui->graphicsView->scene()->itemsBoundingRect(),
-        Qt::KeepAspectRatio);
-    ui->graphicsView->setFocus();
-}

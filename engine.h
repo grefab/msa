@@ -13,9 +13,6 @@ public:
 
     QGraphicsScene* scene();
 
-    QPixmap loadFile(const QString& filename);
-
-
 private:
     QGraphicsScene scene_;
 };
