@@ -56,19 +56,19 @@ void Engine::lab()
             const VoronoiDiagram::vertex_type *v1 = it->vertex1();
 
             if( v0 ) {
-                scene_.addEllipse(v0->x() - 5,
-                                  v0->y() - 5,
-                                  10,
-                                  10,
+                scene_.addEllipse(v0->x() - 1,
+                                  v0->y() - 1,
+                                  2,
+                                  2,
                                   QPen(Qt::blue),
                                   QBrush(Qt::NoBrush));
             }
 
             if( v1 ) {
-                scene_.addEllipse(v1->x() - 5,
-                                  v1->y() - 5,
-                                  10,
-                                  10,
+                scene_.addEllipse(v1->x() - 1,
+                                  v1->y() - 1,
+                                  2,
+                                  2,
                                   QPen(Qt::blue),
                                   QBrush(Qt::NoBrush));
             }
