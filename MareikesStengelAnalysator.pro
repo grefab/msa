@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MareikesStengelAnalysator
 TEMPLATE = app
 
+INCLUDEPATH += $$PWD
 
 SOURCES += main.cpp\
         mainwindow.cpp \

@@ -15,6 +15,8 @@ public:
 
 private:
     QGraphicsScene scene_;
+
+    void lab();
 };
 
 #endif // ENGINE_H
